@@ -1,8 +1,8 @@
 const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
-const { translateText } = require('./src/translations');  // Adjusted path for translations.js
-const { config } = require('./src/config');  // Adjusted path for config.js
-const { logError } = require('./src/utils');  // Adjusted path for utils.js
+const { translateText } = require('./src/translations.js');  // Adjusted path for translations.js
+const { config } = require('./src/config.js');  // Adjusted path for config.js
+const { logError } = require('./src/utils.js');  // Adjusted path for utils.js
 
 const app = express();
 const client = new Client({

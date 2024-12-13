@@ -1,5 +1,5 @@
 const { Client } = require('discord.js');
-const { logError } = require('./src/utils');  // Adjusted path for utils.js
+const { logError } = require('./src/utils.js');  // Adjusted path for utils.js
 const fetch = require('node-fetch');
 const fs = require('fs');  // Added fs import
 const path = require('path');  // Added path import

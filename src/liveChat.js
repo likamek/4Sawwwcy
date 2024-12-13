@@ -1,6 +1,6 @@
-const { translateText } = require('./translations');
-const { transcribeVoice } = require('./transcribe');
-const { logError } = require('./utils');
+const { translateText } = require('./translations.js');
+const { transcribeVoice } = require('./transcribe.js');
+const { logError } = require('./utils.js');
 
 // Handle live chat transcription and translation
 async function handleLiveChat(voiceState) {
