@@ -2,15 +2,16 @@ import fetch from 'node-fetch';
 import fs from 'fs';
 import path from 'path';
 import AdmZip from 'adm-zip';
-import https from 'https';
 
+const modelDir = path.join(__dirname, 'models');
+const modelUrl = 'https://drive.google.com/uc?export=download&id=your-nlp-model-id'; // Update with correct link
 
 async function downloadAndExtractModel(url, outputDir) {
     try {
         const zipPath = path.join(outputDir, 'model.zip');
         const file = fs.createWriteStream(zipPath);
 
-        // Download zip file from Google Drive
+        // Download the zip file from Google Drive
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to download model zip');
 
@@ -36,3 +37,25 @@ function extractModel(zipPath, outputDir) {
         console.error('Error extracting model:', error);
     }
 }
+
+async function checkAndDownloadNLPModel() {
+    // Ensure model directory exists
+    if (!fs.existsSync(modelDir)) {
+        fs.mkdirSync(modelDir);
+        console.log('Model directory created.');
+    }
+
+    const modelPath = path.join(modelDir, 'nlp_model'); // Replace with actual model folder name
+
+    // If model directory doesn't exist, download and extract model
+    if (!fs.existsSync(modelPath)) {
+        console.log('Downloading and extracting NLP model...');
+        await downloadAndExtractModel(modelUrl, modelDir);
+    } else {
+        console.log('NLP model already downloaded.');
+    }
+}
+
+checkAndDownloadNLPModel();
+
+// NLP model
