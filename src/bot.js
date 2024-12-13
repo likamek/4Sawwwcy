@@ -1,15 +1,27 @@
+const express = require('express');
 const { Client, GatewayIntentBits } = require('discord.js');
 const { translateText } = require('./src/translations');  // Adjusted path for translations.js
 const { config } = require('./src/config');  // Adjusted path for config.js
 const { logError } = require('./src/utils');  // Adjusted path for utils.js
 
-// Initialize Discord client
+const app = express();
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildMessages,
         GatewayIntentBits.MessageContent,
     ]
+});
+
+// Express route to keep the service active
+app.get('/', (req, res) => {
+    res.send('Bot is running!');
+});
+
+// Start Express server to listen on the required port
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Web service running on port ${port}`);
 });
 
 // Login to Discord with your app's token
