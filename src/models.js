@@ -1,11 +1,11 @@
-const axios = require('axios');
-const fs = require('fs');
-const path = require('path');
+import axios from 'axios';
+import fs from 'fs';
+import path from 'path';
 
 async function downloadModel() {
     // Google Drive direct download link (replace with your own)
     const url = 'https://drive.google.com/uc?export=download&id=1fXPouig4GE5oiDqY6swAtcOjf__63lU3';
-    const outputPath = path.join(__dirname, 'models', 'whisper_large_model.bin');
+    const outputPath = path.join(__dirname, 'src', 'models', 'whisper_large_model.bin');
 
     const writer = fs.createWriteStream(outputPath);
 

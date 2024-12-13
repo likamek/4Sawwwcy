@@ -1,10 +1,10 @@
 // Log errors to console or external logging service
-function logError(error, context) {
+export function logError(error, context) {
     console.error(`${context}:`, error);
 }
 
 // Utility to check if a message is in English or Russian
-function isValidLanguage(text) {
+export function isValidLanguage(text) {
     const russianPattern = /[А-Яа-яЁё]/;
     const englishPattern = /^[A-Za-z0-9\s.,!?]*$/;
 
@@ -12,5 +12,3 @@ function isValidLanguage(text) {
     if (englishPattern.test(text)) return 'en';
     return 'unknown';
 }
-
-module.exports = { logError, isValidLanguage };

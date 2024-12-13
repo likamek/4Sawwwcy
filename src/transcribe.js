@@ -1,6 +1,6 @@
-const { translateText } = require('./translations.js');  // Adjusted path for translations.js
-const { transcribeVoice } = require('./transcribe.js');  // Adjusted path for transcribe.js
-const { logError } = require('./utils.js');  // Adjusted path for utils.js
+import { translateText } from './translations.js';  // Adjusted path for translations.js
+import { transcribeVoice } from './transcribe.js';  // Adjusted path for transcribe.js
+import { logError } from './utils.js';  // Adjusted path for utils.js
 
 // Handle live chat transcription and translation
 async function handleLiveChat(voiceState) {
@@ -21,4 +21,4 @@ async function handleLiveChat(voiceState) {
     }
 }
 
-module.exports = { handleLiveChat };
+export { handleLiveChat };

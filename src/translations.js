@@ -1,8 +1,8 @@
-const { Client } = require('discord.js');
-const { logError } = require('./utils.js');  // Adjusted path for utils.js
-const fetch = require('node-fetch');
-const fs = require('fs');  // Added fs import
-const path = require('path');  // Added path import
+import fetch from 'node-fetch';
+import { Client } from 'discord.js';
+import { logError } from './utils.js';  // Adjusted path for utils.js
+import fs from 'fs';  // Added fs import
+import path from 'path';  // Added path import
 
 // Load model from Google Drive
 const modelUrl = 'https://drive.google.com/uc?id=18fjbBxu5jMsrU50QBqfAWQyJLYn98b9a';
@@ -64,4 +64,4 @@ async function sendTranslatedMessage(message, translatedText, sourceLang, target
     await webhookChannel.send(webhookMessage);
 }
 
-module.exports = { translateText };
+export { translateText };

@@ -1,9 +1,9 @@
-// download and unzip nlp model
-const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
-const AdmZip = require('adm-zip');
-const https = require('https');
+import fetch from 'node-fetch';
+import fs from 'fs';
+import path from 'path';
+import AdmZip from 'adm-zip';
+import https from 'https';
+
 
 async function downloadAndExtractModel(url, outputDir) {
     try {

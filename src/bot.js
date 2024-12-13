@@ -1,8 +1,11 @@
-const express = require('express');
-const { Client, GatewayIntentBits } = require('discord.js');
-const { translateText } = require('./translations.js');  // Adjusted path for translations.js
-const { config } = require('./config.js');  // Adjusted path for config.js
-const { logError } = require('./utils.js');  // Adjusted path for utils.js
+import express from 'express';
+import { Client, GatewayIntentBits } from 'discord.js';
+import { translateText } from './translations.js';  // Adjusted path for translations.js
+import { logError } from './utils.js';  // Adjusted path for utils.js
+import fetch from 'node-fetch';  // If you need to use fetch
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 const app = express();
 const client = new Client({
@@ -25,7 +28,7 @@ app.listen(port, () => {
 });
 
 // Login to Discord with your app's token
-client.login(config.DISCORD_BOT_TOKEN);
+client.login(process.env.DISCORD_BOT_TOKEN);
 
 // Handle incoming messages
 client.on('messageCreate', async (message) => {
