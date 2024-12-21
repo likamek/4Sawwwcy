@@ -2,6 +2,7 @@ import fetch from 'node-fetch';
 import { Client } from 'discord.js';
 import fs from 'fs';
 import path from 'path';
+import { logError, logInfo } from './utils.js';
 
 const modelUrl = 'https://drive.google.com/uc?id=18fjbBxu5jMsrU50QBqfAWQyJLYn98b9a';
 const modelDir = './models';  // Folder to store the model
@@ -14,9 +15,12 @@ async function translateText(message) {
         // Skip translation if source and target languages are the same
         if (sourceLanguage === targetLanguage) return;
 
+        logInfo(`Translating message from ${sourceLanguage} to ${targetLanguage}`);
+        
         // Ensure the model is downloaded and extracted
         if (!fs.existsSync(modelDir)) {
             fs.mkdirSync(modelDir);
+            logInfo(`Model directory created. Downloading model from ${modelUrl}`);
             await downloadAndExtractModel(modelUrl, modelDir);
         }
 
@@ -26,8 +30,9 @@ async function translateText(message) {
         // Replace original message with a webhook
         await sendTranslatedMessage(message, translatedText, sourceLanguage, targetLanguage);
         await message.delete(); // Delete the original message
+        logInfo('Message translated and original deleted.');
     } catch (error) {
-        console.error('Error during text translation:', error);
+        logError(error, 'Error during text translation');
     }
 }
 
@@ -48,9 +53,10 @@ async function downloadAndExtractModel(url, outputDir) {
         response.body.pipe(file);
         await new Promise((resolve) => file.on('finish', resolve));
 
+        logInfo('Model zip downloaded. Extracting...');
         extractModel(zipPath, outputDir);
     } catch (error) {
-        console.error('Error downloading or extracting model:', error);
+        logError(error, 'Error downloading or extracting model');
     }
 }
 
@@ -60,8 +66,9 @@ function extractModel(zipPath, outputDir) {
         const zip = new AdmZip(zipPath);
         zip.extractAllTo(outputDir, true);
         fs.unlinkSync(zipPath); // Delete the zip file after extraction
+        logInfo('Model extracted successfully.');
     } catch (error) {
-        console.error('Error extracting model:', error);
+        logError(error, 'Error extracting model');
     }
 }
 
