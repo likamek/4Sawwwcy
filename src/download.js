@@ -3,27 +3,37 @@ import fs from 'fs';
 import path from 'path';
 import AdmZip from 'adm-zip';
 
-const modelDir = path.join(__dirname, 'models');
-const modelUrl = 'https://drive.google.com/uc?export=download&id=your-nlp-model-id'; // Update with correct link
+// Base directory (update to your actual directory path)
+const baseDir = path.join(__dirname, 'src', 'download.js'); // Adjusted directory path
+const modelDir = path.join(baseDir, 'NLP'); // Adjusted to "NLP" folder directly
+const modelUrl = 'https://drive.google.com/uc?export=download&id=1M1OeVIV3kb3rZ-49lH8hozeHNYlpQv0_';
 
 async function downloadAndExtractModel(url, outputDir) {
     try {
-        const zipPath = path.join(outputDir, 'model.zip');
-        const file = fs.createWriteStream(zipPath);
+        const zipPath = path.join(outputDir, 'NLP.zip'); // Temporary zip file path
+
+        // Create directory if it doesn't exist
+        if (!fs.existsSync(outputDir)) {
+            fs.mkdirSync(outputDir, { recursive: true });
+            console.log(`Created directory: ${outputDir}`);
+        }
 
         // Download the zip file from Google Drive
+        console.log('Downloading model from:', url);
         const response = await fetch(url);
         if (!response.ok) throw new Error('Failed to download model zip');
 
-        // Save zip file
-        response.body.pipe(file);
-        file.on('finish', () => {
-            file.close();
-            console.log('Download complete, extracting...');
-            extractModel(zipPath, outputDir);
+        const fileStream = fs.createWriteStream(zipPath);
+        await new Promise((resolve, reject) => {
+            response.body.pipe(fileStream);
+            response.body.on('error', reject);
+            fileStream.on('finish', resolve);
         });
+
+        console.log('Download complete. Extracting...');
+        extractModel(zipPath, outputDir);
     } catch (error) {
-        console.error('Error downloading or extracting model:', error);
+        console.error('Error during download or extraction:', error);
     }
 }
 
@@ -31,31 +41,28 @@ function extractModel(zipPath, outputDir) {
     try {
         const zip = new AdmZip(zipPath);
         zip.extractAllTo(outputDir, true);
-        console.log('Extraction complete');
-        fs.unlinkSync(zipPath);  // Optional: delete the zip file after extraction
+        console.log('Extraction complete.');
+        fs.unlinkSync(zipPath); // Delete the zip file after extraction
     } catch (error) {
         console.error('Error extracting model:', error);
     }
 }
 
 async function checkAndDownloadNLPModel() {
-    // Ensure model directory exists
-    if (!fs.existsSync(modelDir)) {
-        fs.mkdirSync(modelDir);
-        console.log('Model directory created.');
-    }
-
-    const modelPath = path.join(modelDir, 'nlp_model'); // Replace with actual model folder name
-
-    // If model directory doesn't exist, download and extract model
-    if (!fs.existsSync(modelPath)) {
-        console.log('Downloading and extracting NLP model...');
-        await downloadAndExtractModel(modelUrl, modelDir);
-    } else {
-        console.log('NLP model already downloaded.');
+    try {
+        // Check if the model folder already exists
+        if (!fs.existsSync(modelDir)) {
+            console.log('NLP model not found. Downloading...');
+            await downloadAndExtractModel(modelUrl, modelDir);
+        } else {
+            console.log('NLP model already exists. Skipping download.');
+        }
+    } catch (error) {
+        console.error('Error checking/downloading NLP model:', error);
     }
 }
 
+// Check and download the model
 checkAndDownloadNLPModel();
 
-// NLP model
+export { checkAndDownloadNLPModel };
