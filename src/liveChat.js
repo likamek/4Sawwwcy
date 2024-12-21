@@ -8,7 +8,6 @@ async function handleLiveChat(voiceState) {
         logInfo(`User ${voiceState.member.user.username} joined the voice channel.`);
         const connection = await voiceState.channel.join();
         const transcriptionThread = await voiceState.channel.send('Transcribing live chat...');
-
         connection.on('speaking', async (user, speaking) => {
             if (speaking) {
                 logInfo(`User ${user.username} is speaking...`);
